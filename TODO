@@ -1,0 +1,5 @@
+ensure no_dup
+inverse pa and pb
+
+in utils.h putstr_endl
+atoi

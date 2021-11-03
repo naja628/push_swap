@@ -1,0 +1,7 @@
+t_emul4.c: In function ‘ft_mk_emul’:
+t_emul4.c:25:3: error: invalid type argument of ‘->’ (have ‘t_emul’ {aka ‘struct <anonymous>’})
+   25 |  t->a = a;
+      |   ^~
+t_emul4.c:26:3: error: invalid type argument of ‘->’ (have ‘t_emul’ {aka ‘struct <anonymous>’})
+   26 |  t->b = b;
+      |   ^~

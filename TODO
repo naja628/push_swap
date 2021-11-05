@@ -1,13 +1,16 @@
-ensure no_dup and only ints
+file splitting
+TODO at bot of algo...
 
-this session:
-sort3orless
-sorttopmost3
-nsorted_opt
+atoi_errcode (to handle overflows and / or non numeric strs)
+handle duplicate detection
 
-next :
-smart_rotate
+bonus:
+cpy parsing part in main
+cpy get_next_line
+cpy t_emul and rm output
+big fun to match lines to functions
+TADA??
+ 
+norminette
 
-
-in utils.h putstr_endl
-atoi
+Do we care about getting only 4/5 for <= 100 ?

@@ -18,9 +18,44 @@ void print_stack(t_destack *t)
 /*	END DEBUG */
 
 // opt masks
-#define Revo 1
-#define AtBot 2
+#define REVO 1
+#define ATBOT 2
 
+// goes to utils
+int	ft_abs(int x)
+{
+	if (x < 0)
+		return (-x);
+	else 
+		return (x);
+}
+
+static int	ft_lucky(t_emul *t, t_aorb to, size_t n, int opt)
+{
+	t_node	*it;
+	t_node	*down;
+
+	if (to == B)
+		return (0);
+	it = ft_getaorb(t, A)->top;
+	if (opt & ATBOT)
+		it = ft_getaorb(t, A)->bot;
+	while (n > 1)
+	{
+		if (opt & ATBOT)
+			it = it->up;
+		down = it->down;
+		if (ft_less(down->x, it->x, (opt & REVO)))
+			return (0);
+		--n;
+		if (!(opt & ATBOT))
+			it = it->down;
+	}
+	return (1);
+}
+
+
+// goes somewhere... maybe with the masks and ft_lucky...
 int	ft_less(int x, int y, int rev)
 {
 	if (rev)
@@ -46,21 +81,19 @@ static int	ft_imax3(t_destack *t, int rev)
 	return (imax);
 }
 
-int	ft_abs(int x)
-{
-	if (x < 0)
-		return (-x);
-	else 
-		return (x);
-}
 
-/* maybe todo : improve to not compute the size */
+/* note : just the else part of the first if would suffice
+ * (correctness wise)
+ * but checking if the stack is small allows us to 
+ * not temper with the time complexity of the whole algorithm...
+ *
+ * another solution would be to keep track of the size of the stacks
+ */
 void	ft_smart_rotate(t_emul *t, t_aorb aorb, int shift)
 {
 	int			rshift;
 	t_destack	*u;
 
-	//////printf("shift : %d\n", shift);
 	u = ft_getaorb(t, aorb);
 	if (ft_atleast_n(u, 2 * ft_abs(shift)))
 			rshift = -shift;
@@ -74,10 +107,7 @@ void	ft_smart_rotate(t_emul *t, t_aorb aorb, int shift)
 	if (rshift < 0 || (shift <= rshift && shift >= 0))
 	{
 		while (--shift + 1)
-		{
-			//////printf("sr : shift %d\n", shift);
 			ft_rx(t, aorb);
-		}
 	}
 	else
 	{
@@ -123,7 +153,6 @@ static int 	ft_sorttop_helper(t_emul *t, t_aorb aorb, int rot, int rev)
 	u = ft_getaorb(t, aorb);
 	if (rot == 0 && ft_imax3(u, rev) == 1)
 	{
-		//////printf("bouh\n");
 		ft_rx(t, aorb);
 		return (ft_sorttop_helper(t, aorb, 1 + rot, rev));
 	}
@@ -145,8 +174,8 @@ static int 	ft_sorttop_helper(t_emul *t, t_aorb aorb, int rot, int rev)
 
 /* sort the topmost 3 elements of the stack a or b 
  * (if there are less than 3 elems just sort it)
- * if (opt & Revo) sort in reverse order 
- * if (opt & AtBot) place them at the bottom
+ * if (opt & REVO) sort in reverse order 
+ * if (opt & ATBOT) place them at the bottom
  * before rotating to the desired place this function implements the 
  * following table:
  * perm : ops - final layout (where | is the rest of the list)
@@ -164,47 +193,26 @@ static void	ft_sort_topmost3max(t_emul *t, t_aorb aorb, size_t n, int opt)
 	u = ft_getaorb(t, aorb);
 	if (!ft_atleast_n(u, 4))
 	{
-		ft_sort3orless(t, aorb, (opt & Revo));
+		ft_sort3orless(t, aorb, (opt & REVO));
 		return ;
 	}
 	rot = 0;
 	if (n < 3)
 	{
-		if (n == 2 && ft_less(ft_nth(u, 1), ft_nth(u, 0), (opt & Revo)))
+		if (n == 2 && ft_less(ft_nth(u, 1), ft_nth(u, 0), (opt & REVO)))
 			ft_sx(t, aorb);
 	}
 	else 
-		rot = ft_sorttop_helper(t, aorb, 0, (opt & Revo));
-	if (opt & AtBot)
+		rot = ft_sorttop_helper(t, aorb, 0, (opt & REVO));
+	if (opt & ATBOT)
 		ft_smart_rotate(t, aorb, n - rot);
 	else 
 		ft_smart_rotate(t, aorb, 0 - rot);
 }
 		
-/*static void	ft_sort2orless(t_emul *t, t_aorb aorb, size_t n, int opt)
-{
-	t_destack	*u;
-	
-	u = ft_getaorb(t, aorb);
-	if (n == 1 && (opt & AtBot))
-		ft_rx(t, aorb);
-	if (n == 0 || n == 1)
-		return;
-	if (ft_less(ft_nth(u, 1), ft_nth(u, 0), (opt & Revo)))
-			ft_sx(t, aorb);
-	if (opt & AtBot)
-	{
-		ft_rx(t, aorb);
-		ft_rx(t, aorb);
-	}
-}
-*/
-
 // TODO file for these 5 fun
-static void	ft_maybe_split(t_emul *t, t_aorb to, size_t n)
+static void	ft_split(t_emul *t, t_aorb to, size_t n)
 {
-	if (!(to == B && n <= 3))
-		return ;
 	while (n)
 	{
 		ft_px(t, to);
@@ -262,47 +270,20 @@ void	ft_subpb_szs(size_t *buff, size_t n)
 	buff[A] = n - n / 2;
 }	
 
-int	ft_lucky(t_emul *t, t_aorb to, size_t n, int opt)
-{
-	t_node	*it;
-	t_node	*down;
-	//debug;
-	//size_t	store = n;
-
-	if (to == B)
-		return (0);
-	it = ft_getaorb(t, A)->top;
-	if (opt & AtBot)
-		it = ft_getaorb(t, A)->bot;
-	while (n > 1)
-	{
-		if (opt & AtBot)
-			it = it->up;
-		down = it->down;
-		if (ft_less(down->x, it->x, (opt & Revo)))
-			return (0);
-		--n;
-		if (!(opt & AtBot))
-			it = it->down;
-	}
-	//printf("***lucky %zu ***\n", store);
-	return (1);
-}
-
 /* Merging must happen according to the following table.
  * (eg to get (opt 0) in stack a, after splitting
- * the half in a must be sorted using opt AtBot
- * and the half in b using opt Revo)
+ * the half in a must be sorted using opt ATBOT
+ * and the half in b using opt REVO)
  * table :
  * opt 			to : from
  * (0)			->| : |->, <-|
- * Revo			<-| : |<-, ->|
- * AtBot		|-> : ->|, ->|
- * Revo | AtBot	|<- : <-|, <-| */
+ * REVO			<-| : |<-, ->|
+ * ATBOT		|-> : ->|, ->|
+ * REVO | ATBOT	|<- : <-|, <-| */
 
 /* sort the n topmost element of the stack a 
- * and put them at the top or bottom (depending on (opt & AtBot))
- * of stack 'to' (in reverse order if (opt & Revo))
+ * and put them at the top or bottom (depending on (opt & ATBOT))
+ * of stack 'to' (in reverse order if (opt & REVO))
  * expects n to be no greater than the size of the 
  * stack a,
  * and t to be valid (not Null etc)  */
@@ -317,37 +298,40 @@ void	ft_merge_sort(t_emul *t, t_aorb to, size_t n, int opt)
 		return ;
 	if (n <= 3)
 	{
+		if (to == B)
+			ft_split(t, B, n);
 		ft_sort_topmost3max(t, to, n, opt);
-		////printf("out :\n");
-		////print_stack(ft_getaorb(t, A));
-		////print_stack(ft_getaorb(t, B));
 		return ;
 	}
 	ft_subpb_szs(szs, n);
-	ft_maybe_split(t, B, szs[B]);
-	if (opt & AtBot)
+	if (opt & ATBOT)
 	{
-		ft_merge_sort(t, B, szs[B], (opt & Revo));
-		ft_merge_sort(t, A, szs[A], (opt & Revo));
+		ft_merge_sort(t, B, szs[B], (opt & REVO));
+		ft_merge_sort(t, A, szs[A], (opt & REVO));
 		//printf("merging to %c\n", (to == A)? 'a' : 'b');
-		ft_merge_atbot(t, to, szs, (opt & Revo));
+		ft_merge_atbot(t, to, szs, (opt & REVO));
 	}
 	else 
 	{
 		if (to == A)
 		{
-			ft_merge_sort(t, ft_other(to), szs[ft_other(to)], (~opt & Revo));
-			ft_merge_sort(t, to, szs[to], AtBot | (opt & Revo));
+			ft_merge_sort(t, ft_other(to), szs[ft_other(to)], (~opt & REVO));
+			ft_merge_sort(t, to, szs[to], ATBOT | (opt & REVO));
 		}
 		else 
 		{
-			ft_merge_sort(t, to, szs[to], AtBot | (opt & Revo));
-			ft_merge_sort(t, ft_other(to), szs[ft_other(to)], (~opt & Revo));
+			ft_merge_sort(t, to, szs[to], ATBOT | (opt & REVO));
+			ft_merge_sort(t, ft_other(to), szs[ft_other(to)], (~opt & REVO));
 		}
 		//printf("merging to %c\n", (to == A)? 'a' : 'b');
-		ft_merge_attop(t, to, szs, (opt & Revo));
+		ft_merge_attop(t, to, szs, (opt & REVO));
 	}
 	//printf("out :\n");
 	//print_stack(ft_getaorb(t, A));
 	//print_stack(ft_getaorb(t, B));
 }
+
+//TODO
+// make a 'interface' fun for ft_merge_sort
+// deal with num of lines for ft_merge_sort
+// best solution is probably to have ft_set_opts(a_opt, b_opt) type thing

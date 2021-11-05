@@ -60,7 +60,7 @@ void	ft_smart_rotate(t_emul *t, t_aorb aorb, int shift)
 	int			rshift;
 	t_destack	*u;
 
-	//printf("shift : %d\n", shift);
+	//////printf("shift : %d\n", shift);
 	u = ft_getaorb(t, aorb);
 	if (ft_atleast_n(u, 2 * ft_abs(shift)))
 			rshift = -shift;
@@ -75,7 +75,7 @@ void	ft_smart_rotate(t_emul *t, t_aorb aorb, int shift)
 	{
 		while (--shift + 1)
 		{
-			//printf("sr : shift %d\n", shift);
+			//////printf("sr : shift %d\n", shift);
 			ft_rx(t, aorb);
 		}
 	}
@@ -123,7 +123,7 @@ static int 	ft_sorttop_helper(t_emul *t, t_aorb aorb, int rot, int rev)
 	u = ft_getaorb(t, aorb);
 	if (rot == 0 && ft_imax3(u, rev) == 1)
 	{
-		//printf("bouh\n");
+		//////printf("bouh\n");
 		ft_rx(t, aorb);
 		return (ft_sorttop_helper(t, aorb, 1 + rot, rev));
 	}
@@ -201,73 +201,93 @@ static void	ft_sort_topmost3max(t_emul *t, t_aorb aorb, size_t n, int opt)
 */
 
 // TODO file for these 5 fun
-static void	ft_split(t_emul *t, t_aorb aorb, size_t n)
+static void	ft_maybe_split(t_emul *t, t_aorb to, size_t n)
 {
-	n /= 2;
+	if (!(to == B && n <= 3))
+		return ;
 	while (n)
 	{
-		ft_px(t, ft_other(aorb));
+		ft_px(t, to);
 		--n;
 	}
 }
 
-static void	ft_merge_atbot(t_emul *t, t_aorb aorb, size_t naorb, size_t nbora, int rev)
+static void	ft_merge_atbot(t_emul *t, t_aorb aorb, size_t *szs, int rev)
 {
-	//printf("merge at bot \n");
 	t_destack	*taorb;
 	t_destack	*tbora;
 
-	if (naorb == 0 && nbora == 0)
+	if (szs[A] == 0 && szs[B] == 0)
 		return ;
 	taorb = ft_getaorb(t, aorb);
 	tbora = ft_getaorb(t, ft_other(aorb));
-	if (naorb == 0 || (nbora != 0 
+	if (szs[aorb] == 0 || (szs[!aorb] != 0 
 			&& ft_less(ft_nth(tbora, 0), ft_nth(taorb, 0), rev)))
 	{
 		ft_px(t, aorb);
-		--nbora;
+		--(szs[!aorb]);
 	}
 	else 
-		--naorb;
+		--(szs[aorb]);
 	ft_rx(t, aorb);
-	ft_merge_atbot(t, aorb, naorb, nbora, rev);
+	ft_merge_atbot(t, aorb, szs, rev);
 }
 
-static void	ft_merge_attop(t_emul *t, t_aorb aorb, size_t naorb, size_t nbora, int rev)
+static void	ft_merge_attop(t_emul *t, t_aorb aorb, size_t *szs, int rev)
 {
-	//printf("merge at top\n");
 	t_destack	*taorb;
 	t_destack	*tbora;
 
-	if (naorb == 0 && nbora == 0)
+	if (szs[A] == 0 && szs[B] == 0)
 		return ;
 	taorb = ft_getaorb(t, aorb);
 	tbora = ft_getaorb(t, ft_other(aorb));
-	if (naorb == 0 || (nbora != 0 
+	if (szs[aorb] == 0 || (szs[!aorb] != 0
 				&& ft_less(ft_rnth(taorb, 0), ft_nth(tbora, 0), rev)))
 	{
 		ft_px(t, aorb);
-		--nbora;
+		--(szs[!aorb]);
 	}
 	else
 	{
 		ft_rrx(t, aorb);
-		--naorb;
+		--(szs[aorb]);
 	}
-	ft_merge_attop(t, aorb, naorb, nbora, rev);
+	ft_merge_attop(t, aorb, szs, rev);
 }
 
 void	ft_subpb_szs(size_t *buff, size_t n)
 {
-	buff[0] = n / 4;
-	buff[1] = n / 4;
-	buff[2] = n / 2;
-	n -= buff[0] + buff[1] + buff[2];
-	if (n >= 1)
-		++(buff[1]);
-	if (n == 2)
-		++(buff[2]);
+	buff[B] = n / 2;
+	buff[A] = n - n / 2;
 }	
+
+int	ft_lucky(t_emul *t, t_aorb to, size_t n, int opt)
+{
+	t_node	*it;
+	t_node	*down;
+	//debug;
+	//size_t	store = n;
+
+	if (to == B)
+		return (0);
+	it = ft_getaorb(t, A)->top;
+	if (opt & AtBot)
+		it = ft_getaorb(t, A)->bot;
+	while (n > 1)
+	{
+		if (opt & AtBot)
+			it = it->up;
+		down = it->down;
+		if (ft_less(down->x, it->x, (opt & Revo)))
+			return (0);
+		--n;
+		if (!(opt & AtBot))
+			it = it->down;
+	}
+	//printf("***lucky %zu ***\n", store);
+	return (1);
+}
 
 /* Merging must happen according to the following table.
  * (eg to get (opt 0) in stack a, after splitting
@@ -280,40 +300,53 @@ void	ft_subpb_szs(size_t *buff, size_t n)
  * AtBot		|-> : ->|, ->|
  * Revo | AtBot	|<- : <-|, <-| */
 
-/* sort the n topmost element of the stack a or b 
+/* sort the n topmost element of the stack a 
+ * and put them at the top or bottom (depending on (opt & AtBot))
+ * of stack 'to' (in reverse order if (opt & Revo))
  * expects n to be no greater than the size of the 
- * stack a or b 
- * and a valid t_emul struct */
-void	ft_merge_sort(t_emul *t, t_aorb aorb, size_t n, int opt)
+ * stack a,
+ * and t to be valid (not Null etc)  */
+void	ft_merge_sort(t_emul *t, t_aorb to, size_t n, int opt)
 {
-	//printf("sorting %zu in %c with opt %u:\n", n, (aorb == A)? 'a' : 'b', opt);
+	//printf("sorting %zu to %c with opt %u:\n", n, (to == A)? 'a' : 'b', opt);
 	//print_stack(ft_getaorb(t, A));
 	//print_stack(ft_getaorb(t, B));
-	size_t	szs[3];
-	int		rev_bora;
+	size_t	szs[2];
 
-	ft_subpb_szs(szs, n);
-	////printf("%zu\n", szs[1]);
-	//if (ft_nfstsorted(ft_getaorb(t, aorb), n))
-	//	return ;
+	if (ft_lucky(t, to, n, opt))
+		return ;
 	if (n <= 3)
 	{
-		ft_sort_topmost3max(t, aorb, n, opt);
+		ft_sort_topmost3max(t, to, n, opt);
+		////printf("out :\n");
+		////print_stack(ft_getaorb(t, A));
+		////print_stack(ft_getaorb(t, B));
 		return ;
 	}
+	ft_subpb_szs(szs, n);
+	ft_maybe_split(t, B, szs[B]);
 	if (opt & AtBot)
-		rev_bora = (opt & Revo);
+	{
+		ft_merge_sort(t, B, szs[B], (opt & Revo));
+		ft_merge_sort(t, A, szs[A], (opt & Revo));
+		//printf("merging to %c\n", (to == A)? 'a' : 'b');
+		ft_merge_atbot(t, to, szs, (opt & Revo));
+	}
 	else 
-		rev_bora = (~opt & Revo);
-	ft_split(t, aorb, szs[0] + szs[1]);
-	ft_merge_sort(t, ft_other(aorb), szs[0], AtBot | rev_bora);
-	ft_merge_sort(t, aorb, szs[1], (~rev_bora & Revo));
-	ft_merge_attop(t, ft_other(aorb), szs[0], szs[1], rev_bora);
-	ft_merge_sort(t, aorb, szs[2], (~opt & AtBot) | (opt & Revo));
-	if (opt & AtBot)
-		ft_merge_atbot(t, aorb, szs[2], szs[0] + szs[1], (opt & Revo));
-	else 
-		ft_merge_attop(t, aorb, szs[2], szs[0] + szs[1], (opt & Revo));
+	{
+		if (to == A)
+		{
+			ft_merge_sort(t, ft_other(to), szs[ft_other(to)], (~opt & Revo));
+			ft_merge_sort(t, to, szs[to], AtBot | (opt & Revo));
+		}
+		else 
+		{
+			ft_merge_sort(t, to, szs[to], AtBot | (opt & Revo));
+			ft_merge_sort(t, ft_other(to), szs[ft_other(to)], (~opt & Revo));
+		}
+		//printf("merging to %c\n", (to == A)? 'a' : 'b');
+		ft_merge_attop(t, to, szs, (opt & Revo));
+	}
 	//printf("out :\n");
 	//print_stack(ft_getaorb(t, A));
 	//print_stack(ft_getaorb(t, B));

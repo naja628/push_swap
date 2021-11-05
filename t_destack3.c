@@ -24,6 +24,24 @@ int	ft_nth(t_destack *t, size_t n)
 		return (it->x);
 }
 
+int	ft_rnth(t_destack *t, size_t n)
+{
+	t_node	*it;
+
+	if (!t || ! t->bot)
+		return (0);
+	it = t->bot;
+	while (it && n)
+	{
+		it = it->up;
+		--n;
+	}
+	if (!it)
+		return (0);
+	else 
+		return (it->x);
+}
+
 /* return 1 if t contains at least n elems
  * 0 otherwise 
  *

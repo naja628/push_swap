@@ -1,5 +1,13 @@
-ensure no_dup
-inverse pa and pb
+ensure no_dup and only ints
+
+this session:
+sort3orless
+sorttopmost3
+nsorted_opt
+
+next :
+smart_rotate
+
 
 in utils.h putstr_endl
 atoi

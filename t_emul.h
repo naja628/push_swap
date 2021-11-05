@@ -8,7 +8,7 @@ typedef struct
 	t_destack *b;
 }	t_emul;
 
-typedef enum {A = 0, B = 1}	t_aorb;
+typedef enum {B = 0, A = 1}	t_aorb;
 
 t_emul		ft_mk_emul(t_destack *a, t_destack *b);
 t_aorb		ft_other(t_aorb aorb);

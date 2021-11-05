@@ -20,9 +20,9 @@ int main(int ac, char **av)
 	while (ac != 1)
 		ft_push(&a, ft_atoi(av[--ac]));
 	t = ft_mk_emul(&a, &b);
-	ft_merge_sort(&t, A, ft_stacksz(&a));
-	//ft_clear(t.a);
-	//ft_clear(t.b);
+	ft_merge_sort(&t, A, ft_stacksz(&a), 0);
+	ft_clear(t.a);
+	ft_clear(t.b);
 	return (0);
 }
 

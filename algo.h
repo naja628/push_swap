@@ -7,6 +7,6 @@
  * expects n to be no greater than the size of the 
  * stack a or b 
  * and a valid t_emul struct */
-void	ft_merge_sort(t_emul *t, t_aorb aorb, size_t n);
-
+void	ft_merge_sort(t_emul *t, t_aorb aorb, size_t n, int opt);
+//TODO typedef and unsigned
 #endif

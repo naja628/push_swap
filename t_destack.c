@@ -45,7 +45,7 @@ int ft_swap(t_destack *t)
 {
 	int	store;
 
-	if (!t->top || !t->top->down)
+	if (!t || !t->top || !t->top->down)
 		return (-1);
 	store = t->top->x;
 	t->top->x = t->top->down->x;
@@ -56,21 +56,25 @@ int ft_swap(t_destack *t)
 /* rotate stack (top goes to bottom) */
 void	ft_rotate(t_destack *t)
 {
-	if (!t->top || !t->top->down)
+	if (!t || !t->top || !t->top->down)
 		return ;
 	t->bot->down = t->top;
+	t->top->up = t->bot;
 	t->bot = t->bot->down;
 	t->top = t->top->down;
 	t->bot->down = NULL;
+	t->top->up = NULL;
 }
 
 /* rotate stack (bot goes to top) */
 void	ft_rrotate(t_destack *t)
 {
-	if (!t->bot || !t->bot->up)
+	if (!t || !t->bot || !t->bot->up)
 		return ;
+	t->bot->down = t->top;
 	t->top->up = t->bot;
 	t->top = t->top->up;
 	t->bot = t->bot->up;
+	t->bot->down = NULL;
 	t->top->up = NULL;
 }

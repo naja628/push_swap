@@ -67,8 +67,10 @@ int			ft_nfstsorted(t_destack *t, size_t n);
  * of t 
  * 0 if does not exist 
  * maybe todo : explicit way to tell 
- * "does not exist" */
+ * "does not exist"
+ * rnth starts at the bottom */
 int			ft_nth(t_destack *t, size_t n);
+int			ft_rnth(t_destack *t, size_t n);
 
 /* return 1 if t contains at least n elems
  * 0 otherwise 

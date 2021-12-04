@@ -1,8 +1,5 @@
-file splitting
-TODO at bot of algo...
-
-atoi_errcode (to handle overflows and / or non numeric strs)
-handle duplicate detection
+put 'split' into algo
+make sure everything still works
 
 bonus:
 cpy parsing part in main

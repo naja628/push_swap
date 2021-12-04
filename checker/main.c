@@ -1,8 +1,8 @@
-#include "algo.h"
-#include <stdlib.h>
 #include "t_destack.h"
 #include "t_emul.h"
 #include "utils.h"
+#include <stdlib.h>
+#include "get_next_line/get_next_line.h"
 
 /* int sorting algo since, bc we don't have access
  * to lookup table, sorting is the "best" way to 
@@ -71,6 +71,27 @@ static int	ft_validate_input(int *xs, char **strs, t_destack *a, int sz)
 	return (0);
 }
 
+static void 	ft_check_exec_stdin(t_emul *t)
+{
+	char *line;
+	int ec;
+
+	line = get_next_line(0);
+	ec = 0;
+	while (ec == 0 && line)
+	{
+		ft_op_ofline(t, line, &ec);
+		free(line);
+		line = get_next_line(0);
+	}
+	if (ec == -1)
+		ft_putstr_endl("Error.");
+	else if (ft_issorted(t->a))
+		ft_putstr_endl("ok");
+	else 
+		ft_putstr_endl("KO");
+}
+
 int main(int ac, char **av)
 {
 	t_destack	a;
@@ -88,7 +109,7 @@ int main(int ac, char **av)
 	free(xs);
 	b = ft_newstack();
 	t = ft_mk_emul(&a, &b);
-	ft_merge_sort(&t, A, ft_stacksz(&a), 0);
+	ft_check_exec_stdin(&t);
 	ft_clear(t.a);
 	ft_clear(t.b);
 	return (0);

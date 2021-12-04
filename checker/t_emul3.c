@@ -1,10 +1,8 @@
 #include "t_emul.h"
 #include "t_destack.h"
-#include "utils.h"
 
 void	ft_rrr(t_emul *t)
 {
-	ft_putstr_endl("rrr");
 	ft_rrotate(t->a);
 	ft_rrotate(t->b);
 }

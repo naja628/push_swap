@@ -3,20 +3,7 @@
 #include "algo.h"
 #include "sort_utils.h"
 
-/****** DEBUG ****/
-#include <stdio.h>
-void print_stack(t_destack *t)
-{
-	t_node *it = t->top;
-
-	while (it)
-	{
-		printf("%d_", it->x);
-		it = it->down;
-	}
-	printf("\n");
-}
-/*	END DEBUG */
+//should split be here instead?
 
 static void	ft_merge_atbot(t_emul *t, t_aorb aorb, size_t *szs, int rev)
 {
@@ -94,9 +81,6 @@ void	ft_decomp_opt(int *opts, int opt, t_aorb to)
  * and t to be valid (not Null etc)  */
 void	ft_merge_sort(t_emul *t, t_aorb to, size_t n, int opt)
 {
-	printf("sorting %zu to %c with opt %u:\n", n, (to == A)? 'a' : 'b', opt);
-	print_stack(ft_getaorb(t, A));
-	print_stack(ft_getaorb(t, B));
 	size_t	sub_szs[2];
 	int		sub_opts[2];
 
@@ -118,7 +102,4 @@ void	ft_merge_sort(t_emul *t, t_aorb to, size_t n, int opt)
 	   ft_merge_atbot(t, to, sub_szs, (opt & REVO));
 	else
 		ft_merge_attop(t, to, sub_szs, (opt & REVO));
-	printf("out :\n");
-	print_stack(ft_getaorb(t, A));
-	print_stack(ft_getaorb(t, B));
 }

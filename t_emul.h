@@ -1,6 +1,7 @@
 #ifndef T_EMUL_H
 # define T_EMUL_H
 # include "t_destack.h"
+# include "utils.h"
 
 typedef struct
 {
@@ -28,5 +29,7 @@ void		ft_rr(t_emul *t);
 void		ft_rra(t_emul *t);
 void		ft_rrb(t_emul *t);
 void		ft_rrr(t_emul *t);
+//only defined in silent version :
+void		ft_op_ofline(t_emul *t, char *line, int *ec);
 
 #endif

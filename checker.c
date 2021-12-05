@@ -2,7 +2,7 @@
 #include "t_emul.h"
 #include "utils.h"
 #include <stdlib.h>
-#include "get_next_line/get_next_line.h"
+#include "get_next_line.h"
 
 /* int sorting algo since, bc we don't have access
  * to lookup table, sorting is the "best" way to 

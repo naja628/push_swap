@@ -1,6 +1,4 @@
-#include "t_emul.h"
-#include "t_destack.h"
-#include "utils.h"
+#include "../t_emul.h"
 
 void	ft_sa(t_emul *t)
 {

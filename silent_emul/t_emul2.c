@@ -1,5 +1,4 @@
-#include "t_emul.h"
-#include "t_destack.h"
+#include "../t_emul.h"
 
 void	ft_ra(t_emul *t)
 {

@@ -110,9 +110,10 @@ char	*get_next_line(int fd)
 	ft_init_line(&l, &ec);
 	if (fd != rd.fd)
 		ft_reset_buf(&rd, fd);
-	while (ec != -1 && !(rd.nrd != BUFFER_SIZE && rd.i == (size_t) rd.nrd))
+//	while (ec != -1 && !(rd.nrd != BUFFER_SIZE && rd.i == (size_t) rd.nrd))
+	while (ec != -1 && rd.nrd != 0)
 	{
-		rd.i %= BUFFER_SIZE;
+		rd.i %= rd.nrd;
 		if (rd.i == 0)
 			rd.nrd = ft_read_errcode(fd, rd.buf, BUFFER_SIZE, &ec);
 		if (l.i >= l.sz)

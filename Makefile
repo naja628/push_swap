@@ -14,7 +14,7 @@ CC=gcc
 NAME=new_push_swap
 CHECKER_NAME=checker
 
-all: ${NAME} ${CHECKER}
+all: ${NAME} checker 
 	@#empty
 
 ${NAME}: ${COMMON_OBJ} ${PS_OBJ} 

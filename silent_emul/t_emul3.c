@@ -2,6 +2,7 @@
 
 void	ft_rrr(t_emul *t)
 {
+	ft_putstr_endl("rrr");
 	ft_rrotate(t->a);
 	ft_rrotate(t->b);
 }
@@ -42,11 +43,14 @@ void	ft_px(t_emul *t, t_aorb aorb)
 		return ;
 	tmp = from->top->down;
 	from->top->down = to->top;
-	if (to == NULL)
+	if (to->top == NULL)
 		to->bot = from->top;
 	else 
 		to->top->up = from->top;
 	to->top = from->top;
 	from->top = tmp;
-	tmp->up = NULL;	
+	if (from->top)
+		from->top->up = NULL;
+	else 
+		from->bot = NULL;
 }

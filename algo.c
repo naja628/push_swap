@@ -99,9 +99,7 @@ void	ft_merge_sort(t_emul *t, t_aorb to, size_t n, int opt)
 	size_t	sub_szs[2];
 	int		sub_opts[2];
 
-//	printf("opt = %d, n = %zu\n", opt, n);
-//	print_stack(t->a);
-//	print_stack(t->b);
+//	printf("opt = %d, n = %zu, to = %c\n", opt, n, (to == A)? 'a' : 'b');
 	if (ft_lucky(t, to, n, opt))
 		return ;
 	if (to == A && n <= 3 && ft_stacksz(t->a) <= 3)
@@ -122,4 +120,6 @@ void	ft_merge_sort(t_emul *t, t_aorb to, size_t n, int opt)
 		else
 			ft_merge_attop(t, to, sub_szs, (opt & REVO));
 	}
+//	print_stack(t->a);
+//	print_stack(t->b);
 }

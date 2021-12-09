@@ -25,8 +25,11 @@ t_emul	ft_mk_emul(t_destack *a, t_destack *b)
 	return (t);
 }
 
+//#include <stdio.h>
 void	ft_op_ofline(t_emul *t, char *line, int *ec)
 {
+//	static int i = 0;
+//	printf("op %d : %s", i++, line);
 	if (!ft_strncmp(line, "pa\n", 3)) 
 		ft_pa(t);
 	else if (!ft_strncmp(line, "pb\n", 3))

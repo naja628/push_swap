@@ -18,7 +18,6 @@ static int	ft_imax3(t_destack *t, int rev)
 	return (imax);
 }
 
-
 /* note : just the else part of the first if would suffice
  * (correctness wise)
  * but checking if the stack is small allows us to 
@@ -39,7 +38,7 @@ static void	ft_smart_rotate(t_emul *t, t_aorb aorb, int shift)
 			rshift = -shift;
 	else 
 	{
-		shift %= ft_stacksz(u);
+		shift %= (int) ft_stacksz(u);
 		if (shift <= 0)
 			shift += ft_stacksz(u);
 		rshift = ft_stacksz(u) - shift;

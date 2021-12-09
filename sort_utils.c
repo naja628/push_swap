@@ -33,12 +33,3 @@ int	ft_less(int x, int y, int rev)
 	else 
 		return (x < y);
 }
-
-void	ft_split(t_emul *t, t_aorb to, size_t n)
-{
-	while (n)
-	{
-		ft_px(t, to);
-		--n;
-	}
-}

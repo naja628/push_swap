@@ -41,13 +41,20 @@ void	ft_px(t_emul *t, t_aorb aorb)
 	to = ft_getaorb(t, aorb);
 	if (!from || !from->top)
 		return ;
+	if (aorb == A)
+		ft_putstr_endl("pa");
+	else
+		ft_putstr_endl("pb");
 	tmp = from->top->down;
 	from->top->down = to->top;
-	if (to == NULL)
+	if (to->top == NULL)
 		to->bot = from->top;
 	else 
 		to->top->up = from->top;
 	to->top = from->top;
 	from->top = tmp;
-	tmp->up = NULL;	
+	if (from->top)
+		from->top->up = NULL;
+	else 
+		from->bot = NULL;
 }

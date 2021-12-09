@@ -71,6 +71,22 @@ static int	ft_validate_input(int *xs, char **strs, t_destack *a, int sz)
 	return (0);
 }
 
+// DEBUG
+# include <stdio.h>
+static void print_stack(t_destack *t)
+{
+	t_node *it = t->top;
+
+	printf("stk :");
+	while (it != NULL)
+	{
+		printf("%d_", it->x);
+		it = it->down;
+	}
+	printf("\n");
+}
+// END_DEBUG
+
 int main(int ac, char **av)
 {
 	t_destack	a;
@@ -88,7 +104,9 @@ int main(int ac, char **av)
 	free(xs);
 	b = ft_newstack();
 	t = ft_mk_emul(&a, &b);
+	print_stack(&a);
 	ft_merge_sort(&t, A, ft_stacksz(&a), 0);
+	print_stack(&a);
 	ft_clear(t.a);
 	ft_clear(t.b);
 	return (0);

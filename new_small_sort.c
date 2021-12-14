@@ -18,7 +18,6 @@ static int	ft_imax3(t_destack *t, int rev)
 	return (imax);
 }
 
-
 /* note : just the else part of the first if would suffice
  * (correctness wise)
  * but checking if the stack is small allows us to 
@@ -27,6 +26,7 @@ static int	ft_imax3(t_destack *t, int rev)
  * another solution would be to keep track of the size of the stacks
  *
  * note : no var for stacksz(u) for dumb norminette reasons
+ * (num of lines)
  */
 static void	ft_smart_rotate(t_emul *t, t_aorb aorb, int shift)
 {
@@ -38,7 +38,7 @@ static void	ft_smart_rotate(t_emul *t, t_aorb aorb, int shift)
 			rshift = -shift;
 	else 
 	{
-		shift %= ft_stacksz(u);
+		shift %= (int) ft_stacksz(u);
 		if (shift <= 0)
 			shift += ft_stacksz(u);
 		rshift = ft_stacksz(u) - shift;
@@ -65,7 +65,7 @@ static void	ft_smart_rotate(t_emul *t, t_aorb aorb, int shift)
  * 2 3 1 : rrx
  * 3 1 2 : rx
  * 3 2 1 : rx sx */
-static void	ft_sort3orless(t_emul *t, t_aorb aorb, int rev)
+void	ft_sort3orless(t_emul *t, t_aorb aorb, int rev)
 {
 	t_destack	*u;
 	int			imax;
@@ -84,67 +84,49 @@ static void	ft_sort3orless(t_emul *t, t_aorb aorb, int rev)
 		ft_sx(t, aorb);
 }
 
-/* note : ad hoc, non-general implementation */
-static int 	ft_sorttop_helper(t_emul *t, t_aorb aorb, int rot, int rev)
+/* with n <= 2 sort the n topmost elems in a according to opt */
+void	ft_a_sorttop(t_emul *t, int n, int opt)
 {
-	t_destack *u;
-
-	u = ft_getaorb(t, aorb);
-	if (rot == 0 && ft_imax3(u, rev) == 1)
-	{
-		ft_rx(t, aorb);
-		return (ft_sorttop_helper(t, aorb, 1 + rot, rev));
-	}
-	if (rot <= 1 && ft_less(ft_nth(u, 1), ft_nth(u, 0), rev))
-	{
-		ft_sx(t, aorb);
-		return (ft_sorttop_helper(t, aorb, rot, rev));
-	}
-	if (rot == 1
-		   	&& ft_less(ft_nth(u, 0), ft_nth(u, 1), rev)
-			&& ft_less(ft_nth(u, 0), ft_rnth(u, 0), rev)
-			&& ft_less(ft_rnth(u, 0), ft_nth(u, 1), rev))
-	{
-		ft_rrx(t, aorb);
-		return (ft_sorttop_helper(t, aorb, rot - 1, rev));
-	}
-	return (rot);
+	if (n == 2 && ft_less(ft_nth(t->a, 1), ft_nth(t->a, 0), opt & REVO))
+		ft_sx(t, A);
+	if (opt & ATBOT)
+		ft_smart_rotate(t, A, n);
 }
 
-/* sort the topmost 3 elements of the stack a or b 
- * (if there are less than 3 elems just sort it)
- * if (opt & REVO) sort in reverse order 
- * if (opt & ATBOT) place them at the bottom
- * before rotating to the desired place this function implements the 
- * following table:
- * perm : ops - final layout (where | is the rest of the list)
- * 1 2 3 : / - 1 2 3 |
- * 1 3 2 : rx sx - 2 3 | 1
- * 2 1 3 : sx - 1 2 3 |
- * 2 3 1 : rx sx rrx sx - 1 2 3 |
- * 3 1 2 : sx rx sx - 2 3 | 1
- * 3 2 1 : sx rx sx rrx sx - 1 2 3 | */
-void	ft_sort_topmost3max(t_emul *t, t_aorb aorb, size_t n, int opt)
+// TODO norminette num of line pb...
+/* take n elems from a and sort them into b according to opt */
+void	ft_binsert_sort(t_emul *t, int n, int opt)
 {
-	t_destack	*u;
-	int			rot;
+	int	ntop;
+	int	npushed;
+	int	x;
 
-	u = ft_getaorb(t, aorb);
-	if (!ft_atleast_n(u, 4))
+	npushed = 0;
+	ntop = 0;
+	x = ft_nth(ft_getaorb(t, A), 0);
+	while (n > npushed)
 	{
-		ft_sort3orless(t, aorb, (opt & REVO));
-		return ;
+		// TODO maybe use smart_rotate(_, 1) instead of rx etc
+		if (ntop != 0 && ft_less(ft_nth(t->b, 0), x, opt & REVO))
+		{
+			ft_rx(t, B);
+			--ntop;
+		}
+		else if (ntop != npushed && ft_less(x, ft_rnth(t->b, 0), opt & REVO))
+		{
+			ft_rrx(t, B);
+			++ntop;
+		}
+		else 
+		{
+			ft_px(t, B);
+			++npushed;
+			++ntop;
+			x = ft_nth(ft_getaorb(t, A), 0);
+		}
 	}
-	rot = 0;
-	if (n < 3)
-	{
-		if (n == 2 && ft_less(ft_nth(u, 1), ft_nth(u, 0), (opt & REVO)))
-			ft_sx(t, aorb);
-	}
-	else 
-		rot = ft_sorttop_helper(t, aorb, 0, (opt & REVO));
 	if (opt & ATBOT)
-		ft_smart_rotate(t, aorb, n - rot);
+		ft_smart_rotate(t, B, ntop);
 	else 
-		ft_smart_rotate(t, aorb, 0 - rot);
+		ft_smart_rotate(t, B, ntop - n);
 }

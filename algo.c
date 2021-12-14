@@ -3,8 +3,6 @@
 #include "algo.h"
 #include "sort_utils.h"
 
-//should split be here instead?
-
 static void	ft_merge_atbot(t_emul *t, t_aorb aorb, size_t *szs, int rev)
 {
 	t_destack	*taorb;
@@ -50,7 +48,7 @@ static void	ft_merge_attop(t_emul *t, t_aorb aorb, size_t *szs, int rev)
 }
 
 /* Merging must happen according to the following table.
- * (eg to get (opt 0) in stack a, after splitting
+ * (eg to get (opt 0) in stack a, after 'splitting'
  * the half in a must be sorted using opt ATBOT
  * and the half in b using opt REVO)
  * table :
@@ -73,33 +71,55 @@ void	ft_decomp_opt(int *opts, int opt, t_aorb to)
 	}
 }
 
+// DEBUG
+# include <stdio.h>
+//static void print_stack(t_destack *t)
+//{
+//	t_node *it = t->top;
+//
+//	printf("stk :");
+//	while (it != NULL)
+//	{
+//		printf("%d_", it->x);
+//		it = it->down;
+//	}
+//	printf("\n");
+//}
+// END_DEBUG
+
+#define SMALL 19
 /* sort the n topmost element of the stack a 
  * and put them at the top or bottom (depending on (opt & ATBOT))
  * of stack 'to' (in reverse order if (opt & REVO))
  * expects n to be no greater than the size of the 
  * stack a,
- * and t to be valid (not Null etc)  */
+ * and t to be valid (not Null etc) */
 void	ft_merge_sort(t_emul *t, t_aorb to, size_t n, int opt)
 {
 	size_t	sub_szs[2];
 	int		sub_opts[2];
 
+//	printf("opt = %d, n = %zu, to = %c\n", opt, n, (to == A)? 'a' : 'b');
 	if (ft_lucky(t, to, n, opt))
 		return ;
-	if (n <= 3)
-	{
-		if (to == B)
-			ft_split(t, B, n);
-		ft_sort_topmost3max(t, to, n, opt);
-		return ;
-	}
-	sub_szs[B] = n / 2;
-	sub_szs[A] = n - n / 2;
-	ft_decomp_opt(sub_opts, opt, to);
-	ft_merge_sort(t, B, sub_szs[B], sub_opts[B]);
-	ft_merge_sort(t, A, sub_szs[A], sub_opts[A]);
-	if (opt & ATBOT)
-	   ft_merge_atbot(t, to, sub_szs, (opt & REVO));
+	if (to == A && n <= 3 && ft_stacksz(t->a) <= 3)
+		ft_sort3orless(t, A, opt & REVO);
+	else if (to == A && n <= 2)
+		ft_a_sorttop(t, n, opt);
+	else if (to == B && n <= SMALL)
+		ft_binsert_sort(t, n, opt);
 	else
-		ft_merge_attop(t, to, sub_szs, (opt & REVO));
+	{
+		sub_szs[B] = n / 2;
+		sub_szs[A] = n - n / 2;
+		ft_decomp_opt(sub_opts, opt, to);
+		ft_merge_sort(t, B, sub_szs[B], sub_opts[B]);
+		ft_merge_sort(t, A, sub_szs[A], sub_opts[A]);
+		if (opt & ATBOT)
+		   ft_merge_atbot(t, to, sub_szs, (opt & REVO));
+		else
+			ft_merge_attop(t, to, sub_szs, (opt & REVO));
+	}
+//	print_stack(t->a);
+//	print_stack(t->b);
 }

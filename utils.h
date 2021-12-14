@@ -1,6 +1,8 @@
 #ifndef UTILS_H
 # define UTILS_H
 
+# include <stddef.h>
+
 typedef unsigned char	t_uchar;
 
 void	ft_putstr_endl(char const *s);

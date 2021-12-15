@@ -1,7 +1,7 @@
 GNL_DIR=get_next_line
 COMMON_SRC= ft_atoi_errcode.c t_destack1.c \
 			t_destack2.c t_destack3.c utils.c
-PS_SRC=sort_utils.c push_swap.c algo.c new_small_sort.c verbose_emul/t_emul1.c \
+PS_SRC=sort_utils.c push_swap.c algo.c small_sort.c verbose_emul/t_emul1.c \
 	   verbose_emul/t_emul2.c verbose_emul/t_emul3.c verbose_emul/t_emul4.c
 CHECKER_SRC=checker.c  silent_emul/t_emul1.c silent_emul/t_emul2.c \
 			silent_emul/t_emul3.c silent_emul/t_emul4.c \
@@ -11,7 +11,7 @@ PS_OBJ=${PS_SRC:.c=.o}
 CHECKER_OBJ=${CHECKER_SRC:.c=.o}
 CFLAGS=-Wall -Wextra -Werror -I${GNL_DIR}
 CC=gcc
-NAME=new_push_swap
+NAME=push_swap
 CHECKER_NAME=checker
 
 all: ${NAME} checker 

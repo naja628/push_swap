@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   t_destack1.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: najacque <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/14 15:48:02 by najacque          #+#    #+#             */
+/*   Updated: 2021/12/15 18:06:17 by najacque         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include "t_destack.h"
 
 /* convention the 'canonical' stack we operate on is gonna be
  * called t in most functions */
 
-/* returns an empty stack 
+/* returns an empty stack
  * no allocation is performed */
 t_destack	ft_newstack(void)
 {
@@ -15,8 +27,8 @@ t_destack	ft_newstack(void)
 	return (t);
 }
 
-/* push x onto t 
- * return 0 if ok 
+/* push x onto t
+ * return 0 if ok
  * -1 if malloc error */
 int	ft_push(t_destack *t, int x)
 {
@@ -33,15 +45,15 @@ int	ft_push(t_destack *t, int x)
 	t->top = new_node;
 	if (t->bot == NULL)
 		t->bot = new_node;
-	else 
+	else
 		t->top->down->up = new_node;
 	return (0);
 }
 
 /* swap the 2 topmost elems of t
- * return -1 if t contains less than 2 elems 
+ * return -1 if t contains less than 2 elems
  * (0 if successful) */
-int ft_swap(t_destack *t)
+int	ft_swap(t_destack *t)
 {
 	int	store;
 

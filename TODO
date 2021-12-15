@@ -1,7 +1,1 @@
-put 'split' into algo
-make sure everything still works
-
-norminette
-
-Do we care about getting only 4/5 for <= 100 ?
--> try the insert sort thingy
+ft_binsert_sort > 25 lines

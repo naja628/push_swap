@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sort_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: najacque <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/14 15:48:01 by najacque          #+#    #+#             */
+/*   Updated: 2021/12/15 18:05:40 by najacque         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "sort_utils.h"
 #include "t_emul.h"
 
@@ -25,11 +37,10 @@ int	ft_lucky(t_emul *t, t_aorb to, size_t n, int opt)
 	return (1);
 }
 
-
 int	ft_less(int x, int y, int rev)
 {
 	if (rev)
 		return (x > y);
-	else 
+	else
 		return (x < y);
 }

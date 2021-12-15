@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   t_destack3.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: najacque <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/14 15:48:04 by najacque          #+#    #+#             */
+/*   Updated: 2021/12/15 18:08:01 by najacque         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include "t_destack.h"
 
-/* return the val of the nth elem 
- * of t 
- * 0 if does not exist 
- * maybe todo : explicit way to tell 
+/* return the val of the nth elem
+ * of t
+ * 0 if does not exist
+ * maybe todo : explicit way to tell
  * "does not exist" */
 int	ft_nth(t_destack *t, size_t n)
 {
@@ -20,7 +32,7 @@ int	ft_nth(t_destack *t, size_t n)
 	}
 	if (!it)
 		return (0);
-	else 
+	else
 		return (it->x);
 }
 
@@ -38,14 +50,14 @@ int	ft_rnth(t_destack *t, size_t n)
 	}
 	if (!it)
 		return (0);
-	else 
+	else
 		return (it->x);
 }
 
 /* return 1 if t contains at least n elems
- * 0 otherwise 
+ * 0 otherwise
  *
- * if n is 0 but t is NULL return 0 
+ * if n is 0 but t is NULL return 0
  * (as t is then not a valid stack)
  * but return 1 if t->top is NULL */
 int	ft_atleast_n(t_destack *t, size_t n)
@@ -62,7 +74,6 @@ int	ft_atleast_n(t_destack *t, size_t n)
 	}
 	if (n == 0)
 		return (1);
-	else 
+	else
 		return (0);
 }
-

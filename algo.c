@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   algo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: najacque <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/14 15:47:52 by najacque          #+#    #+#             */
+/*   Updated: 2021/12/15 17:51:04 by najacque         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "t_emul.h"
 #include "t_destack.h"
 #include "algo.h"
@@ -12,13 +24,13 @@ static void	ft_merge_atbot(t_emul *t, t_aorb aorb, size_t *szs, int rev)
 		return ;
 	taorb = ft_getaorb(t, aorb);
 	tbora = ft_getaorb(t, ft_other(aorb));
-	if (szs[aorb] == 0 || (szs[!aorb] != 0 
+	if (szs[aorb] == 0 || (szs[!aorb] != 0
 			&& ft_less(ft_nth(tbora, 0), ft_nth(taorb, 0), rev)))
 	{
 		ft_px(t, aorb);
 		--(szs[!aorb]);
 	}
-	else 
+	else
 		--(szs[aorb]);
 	ft_rx(t, aorb);
 	ft_merge_atbot(t, aorb, szs, rev);
@@ -34,7 +46,7 @@ static void	ft_merge_attop(t_emul *t, t_aorb aorb, size_t *szs, int rev)
 	taorb = ft_getaorb(t, aorb);
 	tbora = ft_getaorb(t, ft_other(aorb));
 	if (szs[aorb] == 0 || (szs[!aorb] != 0
-				&& ft_less(ft_rnth(taorb, 0), ft_nth(tbora, 0), rev)))
+			&& ft_less(ft_rnth(taorb, 0), ft_nth(tbora, 0), rev)))
 	{
 		ft_px(t, aorb);
 		--(szs[!aorb]);
@@ -58,7 +70,7 @@ static void	ft_merge_attop(t_emul *t, t_aorb aorb, size_t *szs, int rev)
  * ATBOT		|-> : ->|, ->|
  * REVO | ATBOT	|<- : <-|, <-| */
 void	ft_decomp_opt(int *opts, int opt, t_aorb to)
-{ 
+{
 	if (opt & ATBOT)
 	{
 		opts[!to] = (opt & REVO);
@@ -72,7 +84,7 @@ void	ft_decomp_opt(int *opts, int opt, t_aorb to)
 }
 
 // DEBUG
-# include <stdio.h>
+//# include <stdio.h>
 //static void print_stack(t_destack *t)
 //{
 //	t_node *it = t->top;
@@ -88,10 +100,10 @@ void	ft_decomp_opt(int *opts, int opt, t_aorb to)
 // END_DEBUG
 
 #define SMALL 19
-/* sort the n topmost element of the stack a 
+/* sort the n topmost element of the stack a
  * and put them at the top or bottom (depending on (opt & ATBOT))
  * of stack 'to' (in reverse order if (opt & REVO))
- * expects n to be no greater than the size of the 
+ * expects n to be no greater than the size of the
  * stack a,
  * and t to be valid (not Null etc) */
 void	ft_merge_sort(t_emul *t, t_aorb to, size_t n, int opt)
@@ -99,7 +111,6 @@ void	ft_merge_sort(t_emul *t, t_aorb to, size_t n, int opt)
 	size_t	sub_szs[2];
 	int		sub_opts[2];
 
-//	printf("opt = %d, n = %zu, to = %c\n", opt, n, (to == A)? 'a' : 'b');
 	if (ft_lucky(t, to, n, opt))
 		return ;
 	if (to == A && n <= 3 && ft_stacksz(t->a) <= 3)
@@ -116,10 +127,8 @@ void	ft_merge_sort(t_emul *t, t_aorb to, size_t n, int opt)
 		ft_merge_sort(t, B, sub_szs[B], sub_opts[B]);
 		ft_merge_sort(t, A, sub_szs[A], sub_opts[A]);
 		if (opt & ATBOT)
-		   ft_merge_atbot(t, to, sub_szs, (opt & REVO));
+			ft_merge_atbot(t, to, sub_szs, (opt & REVO));
 		else
 			ft_merge_attop(t, to, sub_szs, (opt & REVO));
 	}
-//	print_stack(t->a);
-//	print_stack(t->b);
 }

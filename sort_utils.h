@@ -37,5 +37,16 @@ void	ft_sort3orless(t_emul *t, t_aorb aorb, int rev);
 void	ft_a_sorttop(t_emul *t, int n, int opt);
 /* take n elems from a and sort them into b according to opt */
 void	ft_binsert_sort(t_emul *t, int n, int opt);
+/* note : just the else part of the first if would suffice
+ * (correctness wise)
+ * but checking if the stack is small allows us to
+ * not temper with the time complexity of the whole algorithm...
+ *
+ * another solution would be to keep track of the size of the stacks
+ *
+ * note : no var for stacksz(u) for dumb norminette reasons
+ * (num of lines)
+ */
+void	ft_smart_rotate(t_emul *t, t_aorb aorb, int shift);
 
 #endif

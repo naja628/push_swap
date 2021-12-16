@@ -30,43 +30,6 @@ static int	ft_imax3(t_destack *t, int rev)
 	return (imax);
 }
 
-/* note : just the else part of the first if would suffice
- * (correctness wise)
- * but checking if the stack is small allows us to
- * not temper with the time complexity of the whole algorithm...
- *
- * another solution would be to keep track of the size of the stacks
- *
- * note : no var for stacksz(u) for dumb norminette reasons
- * (num of lines)
- */
-static void	ft_smart_rotate(t_emul *t, t_aorb aorb, int shift)
-{
-	int			rshift;
-	t_destack	*u;
-
-	u = ft_getaorb(t, aorb);
-	if (ft_atleast_n(u, 2 * ft_abs(shift)))
-			rshift = -shift;
-	else
-	{
-		shift %= (int) ft_stacksz(u);
-		if (shift <= 0)
-			shift += ft_stacksz(u);
-		rshift = ft_stacksz(u) - shift;
-	}
-	if (rshift < 0 || (shift <= rshift && shift >= 0))
-	{
-		while (--shift + 1)
-			ft_rx(t, aorb);
-	}
-	else
-	{
-		while (--rshift + 1)
-			ft_rrx(t, aorb);
-	}
-}
-
 /* sort the stack a or b when sz <= 3
  * if rev == 1 sort in reverse order
  * note : ad hoc, non-general implementation
@@ -105,37 +68,40 @@ void	ft_a_sorttop(t_emul *t, int n, int opt)
 		ft_smart_rotate(t, A, n);
 }
 
+static void	ft_binsert_helper(t_emul *t, int *npushed, int *ntop, int opt)
+{
+	int	x;
+
+	x = ft_nth(ft_getaorb(t, A), 0);
+	if (*ntop != 0 && ft_less(ft_nth(t->b, 0), x, opt & REVO))
+	{
+		ft_rx(t, B);
+		--(*ntop);
+	}
+	else if (*ntop != *npushed && ft_less(x, ft_rnth(t->b, 0), opt & REVO))
+	{
+		ft_rrx(t, B);
+		++(*ntop);
+	}
+	else
+	{
+		ft_px(t, B);
+		++(*npushed);
+		++(*ntop);
+	}
+}
+
 // TODO norminette num of line pb...
 /* take n elems from a and sort them into b according to opt */
 void	ft_binsert_sort(t_emul *t, int n, int opt)
 {
 	int	ntop;
 	int	npushed;
-	int	x;
 
 	npushed = 0;
 	ntop = 0;
-	x = ft_nth(ft_getaorb(t, A), 0);
 	while (n > npushed)
-	{
-		if (ntop != 0 && ft_less(ft_nth(t->b, 0), x, opt & REVO))
-		{
-			ft_rx(t, B);
-			--(ntop);
-		}
-		else if (ntop != npushed && ft_less(x, ft_rnth(t->b, 0), opt & REVO))
-		{
-			ft_rrx(t, B);
-			++(ntop);
-		}
-		else
-		{
-			ft_px(t, B);
-			++(npushed);
-			++(ntop);
-			x = ft_nth(ft_getaorb(t, A), 0);
-		}
-	}
+		ft_binsert_helper(t, &npushed, &ntop, opt);
 	if (opt & ATBOT)
 		ft_smart_rotate(t, B, ntop);
 	else

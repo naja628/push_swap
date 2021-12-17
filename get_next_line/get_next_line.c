@@ -6,7 +6,7 @@
 /*   By: najacque <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:29:54 by najacque          #+#    #+#             */
-/*   Updated: 2021/10/20 14:30:35 by najacque         ###   ########.fr       */
+/*   Updated: 2021/12/17 14:35:50 by najacque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ char	*get_next_line(int fd)
 	ft_init_line(&l, &ec);
 	if (fd != rd.fd)
 		ft_reset_buf(&rd, fd);
-//	while (ec != -1 && !(rd.nrd != BUFFER_SIZE && rd.i == (size_t) rd.nrd))
 	while (ec != -1 && rd.nrd != 0)
 	{
 		rd.i %= rd.nrd;

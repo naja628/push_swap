@@ -6,7 +6,7 @@
 /*   By: najacque <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 15:48:07 by najacque          #+#    #+#             */
-/*   Updated: 2021/12/14 15:48:07 by najacque         ###   ########.fr       */
+/*   Updated: 2021/12/17 14:32:27 by najacque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@
  * (to allow for O(1) rotations) */
 typedef struct s_node
 {
-	int					x;
+	int				x;
 	struct s_node	*down;
 	struct s_node	*up;
 }	t_node;
 
-typedef struct
+typedef struct s_destack
 {
 	t_node	*bot;
 	t_node	*top;

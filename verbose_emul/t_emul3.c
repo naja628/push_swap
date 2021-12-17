@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   t_emul3.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: najacque <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/17 14:27:41 by najacque          #+#    #+#             */
+/*   Updated: 2021/12/17 14:29:13 by najacque         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../t_emul.h"
 
 void	ft_rrr(t_emul *t)
@@ -16,7 +28,7 @@ t_destack	*ft_getaorb(t_emul *t, t_aorb aorb)
 {
 	if (aorb == B)
 		return (t->b);
-	else 
+	else
 		return (t->a);
 }
 
@@ -49,12 +61,12 @@ void	ft_px(t_emul *t, t_aorb aorb)
 	from->top->down = to->top;
 	if (to->top == NULL)
 		to->bot = from->top;
-	else 
+	else
 		to->top->up = from->top;
 	to->top = from->top;
 	from->top = tmp;
 	if (from->top)
 		from->top->up = NULL;
-	else 
+	else
 		from->bot = NULL;
 }

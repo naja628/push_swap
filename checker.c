@@ -6,7 +6,7 @@
 /*   By: najacque <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 15:47:55 by najacque          #+#    #+#             */
-/*   Updated: 2021/12/15 17:59:36 by najacque         ###   ########.fr       */
+/*   Updated: 2021/12/17 14:54:06 by najacque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,8 @@ static void	ft_check_exec_stdin(t_emul *t)
 	}
 	if (ec == -1)
 		ft_putstr_endl("Error.");
-	else if (ft_issorted(t->a))
-		ft_putstr_endl("ok");
+	else if (ft_issorted(t->a) && t->b->top == NULL)
+		ft_putstr_endl("OK");
 	else
 		ft_putstr_endl("KO");
 }

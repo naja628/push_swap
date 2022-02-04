@@ -1,2 +1,3 @@
 norminette : don't forget t_emul !!!
 			or get_next_line
+checker should display OK (not ok)

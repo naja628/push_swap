@@ -15,6 +15,7 @@
 #include "utils.h"
 #include <stdlib.h>
 #include "get_next_line.h"
+#include "ft_strsplit.h"
 
 /* int sorting algo since, bc we don't have access
  * to lookup table, sorting is the "best" way to
@@ -99,30 +100,45 @@ static void	ft_check_exec_stdin(t_emul *t)
 	if (ec == -1)
 		ft_putstr_endl("Error.");
 	else if (ft_issorted(t->a))
-		ft_putstr_endl("ok");
+		ft_putstr_endl("OK");
 	else
 		ft_putstr_endl("KO");
+}
+
+static void	ft_check_and_cleanup(t_destack *a)
+{
+	t_destack	b;
+	t_emul		t;
+
+	b = ft_newstack();
+	t = ft_mk_emul(a, &b);
+	ft_check_exec_stdin(&t);
+	ft_clear(t.a);
+	ft_clear(t.b);
 }
 
 int	main(int ac, char **av)
 {
 	t_destack	a;
-	t_destack	b;
-	t_emul		t;
 	int			*xs;
+	char		**strargs;
 
+	strargs = av + 1;
+	if (ac == 2)
+		strargs = ft_strsplit(av[1], ' ', &ac);
 	a = ft_newstack();
 	xs = malloc(sizeof(int) * (ac - 1));
-	if (!xs || ft_validate_input(xs, av + 1, &a, ac - 1) == -1)
+	if (!xs || ft_validate_input(xs, strargs, &a, ac - 1) == -1)
 	{
 		ft_putstr_endl("Error.");
 		return (-1);
 	}
 	free(xs);
-	b = ft_newstack();
-	t = ft_mk_emul(&a, &b);
-	ft_check_exec_stdin(&t);
-	ft_clear(t.a);
-	ft_clear(t.b);
+	if (strargs != av + 1)
+	{
+		free(*strargs);
+		free(strargs);
+	}
+	ft_check_and_cleanup(&a);
 	return (0);
 }

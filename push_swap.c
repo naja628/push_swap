@@ -15,6 +15,7 @@
 #include "t_destack.h"
 #include "t_emul.h"
 #include "utils.h"
+#include "ft_strsplit.h"
 
 /* int sorting algo since, bc we don't have access
  * to lookup table, sorting is the "best" way to
@@ -99,25 +100,41 @@ static int	ft_validate_input(int *xs, char **strs, t_destack *a, int sz)
 //}
 // END_DEBUG
 
+// for norminette number of lines
+static void	ft_sort_and_cleanup(t_destack *a)
+{
+	t_destack	b;
+	t_emul		t;
+
+	b = ft_newstack();
+	t = ft_mk_emul(a, &b);
+	ft_merge_sort(&t, A, ft_stacksz(a), 0);
+	ft_clear(t.a);
+	ft_clear(t.b);
+}
+
 int	main(int ac, char **av)
 {
 	t_destack	a;
-	t_destack	b;
-	t_emul		t;
 	int			*xs;
+	char		**strargs;
 
+	strargs = av + 1;
+	if (ac == 2)
+		strargs = ft_strsplit(av[1], ' ', &ac);
 	a = ft_newstack();
 	xs = malloc(sizeof(int) * (ac - 1));
-	if (!xs || ft_validate_input(xs, av + 1, &a, ac - 1) == -1)
+	if (!xs || ft_validate_input(xs, strargs, &a, ac - 1) == -1)
 	{
 		ft_putstr_endl("Error.");
 		return (-1);
 	}
 	free(xs);
-	b = ft_newstack();
-	t = ft_mk_emul(&a, &b);
-	ft_merge_sort(&t, A, ft_stacksz(&a), 0);
-	ft_clear(t.a);
-	ft_clear(t.b);
+	if (strargs != av + 1)
+	{
+		free(strargs[0]);
+		free(strargs);
+	}
+	ft_sort_and_cleanup(&a);
 	return (0);
 }

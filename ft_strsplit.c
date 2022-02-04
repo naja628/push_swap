@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strsplit.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: najacque <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/04 16:46:42 by najacque          #+#    #+#             */
+/*   Updated: 2022/02/04 17:14:53 by najacque         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 
 static void	ft_setcounts(const char *s, char c, size_t *nbytes, size_t *nwords)
@@ -49,6 +61,7 @@ char	**ft_strsplit(const char *s, char c, int *ntab)
 	char	*buff;
 	char	**tab;
 
+	buff = NULL;
 	ft_setcounts(s, c, &nbytes, &nwords);
 	*ntab = nwords + 1;
 	tab = malloc(sizeof(char *) * (nwords + 1));

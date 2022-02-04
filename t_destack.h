@@ -18,12 +18,12 @@
  * (to allow for O(1) rotations) */
 typedef struct s_node
 {
-	int					x;
+	int				x;
 	struct s_node	*down;
 	struct s_node	*up;
 }	t_node;
 
-typedef struct
+typedef struct s_destack
 {
 	t_node	*bot;
 	t_node	*top;

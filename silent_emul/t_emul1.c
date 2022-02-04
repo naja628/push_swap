@@ -21,8 +21,7 @@ void	ft_pa(t_emul *t)
 	ft_px(t, A);
 }
 
-void 	ft_pb(t_emul *t)
+void	ft_pb(t_emul *t)
 {
 	ft_px(t, B);
 }
-

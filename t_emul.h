@@ -15,17 +15,17 @@
 # include "t_destack.h"
 # include "utils.h"
 
-typedef struct
+typedef struct s_emul
 {
-	t_destack *a;
-	t_destack *b;
+	t_destack	*a;
+	t_destack	*b;
 }	t_emul;
 
-typedef enum {B = 0, A = 1}	t_aorb;
+typedef enum e_aorb {B = 0, A = 1}	t_aorb;
 
 t_emul		ft_mk_emul(t_destack *a, t_destack *b);
 t_aorb		ft_other(t_aorb aorb);
-t_destack	*ft_getaorb(t_emul *t, t_aorb aorb); 
+t_destack	*ft_getaorb(t_emul *t, t_aorb aorb);
 void		ft_sx(t_emul *t, t_aorb aorb);
 void		ft_px(t_emul *t, t_aorb aorb);
 void		ft_rx(t_emul *t, t_aorb aorb);

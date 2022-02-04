@@ -5,7 +5,7 @@ COMMON_SRC= ft_atoi_errcode.c t_destack1.c \
 PS_SRC=sort_utils.c push_swap.c algo.c small_sort.c verbose_emul/t_emul1.c \
 	   verbose_emul/t_emul2.c verbose_emul/t_emul3.c verbose_emul/t_emul4.c
 CHECKER_SRC=checker.c  silent_emul/t_emul1.c silent_emul/t_emul2.c \
-			silent_emul/t_emul3.c silent_emul/t_emul4.c \
+			silent_emul/t_emul3.c silent_emul/t_emul4.c check_exec.c \
 			${addprefix ${GNL_DIR}/, get_next_line.c get_next_line_utils.c}
 COMMON_OBJ=${COMMON_SRC:.c=.o}
 PS_OBJ=${PS_SRC:.c=.o}

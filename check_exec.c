@@ -6,11 +6,13 @@
 /*   By: najacque <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:42:31 by najacque          #+#    #+#             */
-/*   Updated: 2022/02/04 16:42:34 by najacque         ###   ########.fr       */
+/*   Updated: 2022/02/08 16:55:42 by najacque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
 #include "check_exec.h"
+
 
 void	ft_check_exec_stdin(t_emul *t)
 {
@@ -26,7 +28,7 @@ void	ft_check_exec_stdin(t_emul *t)
 		line = get_next_line(0);
 	}
 	if (ec == -1)
-		ft_putstr_endl("Error.");
+		write(2, "Error\n", 6);
 	else if (ft_issorted(t->a))
 		ft_putstr_endl("OK");
 	else

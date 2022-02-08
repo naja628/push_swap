@@ -6,10 +6,11 @@
 /*   By: najacque <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 15:48:00 by najacque          #+#    #+#             */
-/*   Updated: 2021/12/15 17:58:53 by najacque         ###   ########.fr       */
+/*   Updated: 2022/02/08 16:56:06 by najacque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
 #include "algo.h"
 #include <stdlib.h>
 #include "t_destack.h"
@@ -126,7 +127,7 @@ int	main(int ac, char **av)
 	xs = malloc(sizeof(int) * (ac - 1));
 	if (!xs || ft_validate_input(xs, strargs, &a, ac - 1) == -1)
 	{
-		ft_putstr_endl("Error.");
+		write(2, "Error\n", 6);
 		return (-1);
 	}
 	free(xs);

@@ -6,10 +6,11 @@
 /*   By: najacque <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 15:47:55 by najacque          #+#    #+#             */
-/*   Updated: 2021/12/15 17:59:36 by najacque         ###   ########.fr       */
+/*   Updated: 2022/02/08 16:55:56 by najacque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
 #include "t_destack.h"
 #include "t_emul.h"
 #include "utils.h"
@@ -102,6 +103,8 @@ int	main(int ac, char **av)
 	int			*xs;
 	char		**strargs;
 
+	if (ac == 1)
+		return (0);
 	strargs = av + 1;
 	if (ac == 2)
 		strargs = ft_strsplit(av[1], ' ', &ac);
@@ -109,7 +112,7 @@ int	main(int ac, char **av)
 	xs = malloc(sizeof(int) * (ac - 1));
 	if (!xs || ft_validate_input(xs, strargs, &a, ac - 1) == -1)
 	{
-		ft_putstr_endl("Error.");
+		write(2, "Error\n", 6);
 		return (-1);
 	}
 	free(xs);
